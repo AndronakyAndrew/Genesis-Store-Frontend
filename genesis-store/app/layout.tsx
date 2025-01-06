@@ -1,12 +1,15 @@
-import Layout, { Content, Footer, Header } from "antd/es/layout/layout";
-import "./globals.css";
-import { Menu } from "antd";
-import Link from "next/link";
+'use client';
 
-const items = [
-  { key: "home", label: <Link href={"/"}>Главная</Link>},
-  { key: "product", label: <Link href={"/products"}>Товары</Link>}
-]
+import { Layout } from "antd";
+import "./globals.css";
+import { Inter } from 'next/font/google';
+import { MainMenu } from "./components/layout/MainMenu";
+import { MainFooter } from "./components/layout/MainFooter";
+import { ConfigProvider } from "antd";
+import { Logo } from "./components/layout/Logo";
+
+const { Header, Content } = Layout;
+const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
   children,
@@ -15,24 +18,49 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <Layout style={ {minHeight: "100vh" } }>
-          <Header>
-            <Menu 
-                theme="dark"
-                mode="horizontal"
-                items={items}
-                style={{flex: 1, minWidth: 0}}
-            />
-          </Header>
-          <Content style={{padding: "0 48px" }}>
-            {children}
-          </Content>
-          <Footer style={{textAlign: "center"}}>
-            Created by Genesis Industries company. All rights reserved.
-          </Footer>
-        </Layout>
-
+      <body className={inter.className}>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: '#1890ff',
+              borderRadius: 8,
+              colorBgContainer: '#ffffff',
+              colorBgLayout: '#f5f5f5',
+              fontFamily: inter.style.fontFamily,
+            },
+          }}
+        >
+          <Layout style={{ minHeight: "100vh" }}>
+            <Header style={{
+              position: 'sticky',
+              top: 0,
+              zIndex: 1,
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 24px',
+              background: '#001529',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
+            }}>
+              <Logo />
+              <MainMenu />
+            </Header>
+            <Content style={{ 
+              padding: '48px 24px',
+              background: '#f5f5f5'
+            }}>
+              <div style={{
+                background: '#fff',
+                borderRadius: '12px',
+                padding: '32px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+              }}>
+                {children}
+              </div>
+            </Content>
+            <MainFooter />
+          </Layout>
+        </ConfigProvider>
       </body>
     </html>
   );
